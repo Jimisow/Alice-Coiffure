@@ -14,6 +14,7 @@ Application **interne** pour le salon *Alice Coiffure* : fichier clientes (cheve
   - Sélecteur d'heure maison (`shared/ui/timePicker.js`).
   - Panneau « Choisir le créneau » : premiers créneaux libres, calendrier du mois (fermé / complet), déroulé du jour avec les heures où la prestation tient.
   - Jours et horaires de travail réglables dans Réglages.
+  - Bandeau « Installer l'app » adapté à la plateforme en haut de l'accueil (fermable, revient après 14 jours ; masqué une fois installée) + carte permanente en haut de Réglages.
   - Bloc de statistiques compact en haut de Réglages ; menu « ⋯ » sur les RDV (Modifier / Annuler / Pas venue) ; carte fidélité dans le talon des RDV.
   - Réglages rangés par catégories : sommaire `#/reglages` (Salon, Carte fidélité, Sauvegarde, Données, chacune avec un résumé) puis une page par catégorie `#/reglages/:section`.
 - Le dossier **n'est pas un dépôt git** (voir « Pièges »).
@@ -76,6 +77,8 @@ js/
     routes.js            REGISTRE : onglets (tabs) + routes — seul fichier à toucher pour brancher une feature
     router.js            routeur hash ; fournit ctx aux vues
     bottomNav.js, toast.js, serviceWorker.js
+    install.js           « Installer l'app » selon la plateforme (Android : invite native ; iPhone : guide Partager → écran d'accueil ;
+                         navigateur intégré : copier le lien) — exposé aux vues par ctx.install.mount(slot, { dismissible })
   features/              UN DOSSIER PAR FONCTIONNALITÉ (index.js = API publique)
     clients/             liste+recherche, fiche, formulaire (création/édition/suppression), clientService
     loyalty/             règles + carte poinçonnée + mini-carte + historique (loyaltyService)
@@ -108,7 +111,7 @@ main.js → app/ → features/*/index.js → (features/* internes) → data/inde
 
 1. **Une feature = un dossier** avec `index.js` public. Une feature n'importe une autre feature **que via son `index.js`**. Il existe un cycle clients ↔ appointments (fiche ↔ agenda) : sans danger tant qu'aucun module n'utilise l'autre **au chargement** (seulement dans des fonctions).
 2. **Les vues n'accèdent jamais aux données directement** : vue → service → `data/index.js`. Même l'écran Réglages passe par `settingsService`.
-3. **Les vues ne touchent pas au shell** : elles utilisent `ctx` (`navigate(path, {replace})`, `back(fallback)`, `toast(msg, {action})`, `params`, `query`, `isCurrent()`).
+3. **Les vues ne touchent pas au shell** : elles utilisent `ctx` (`navigate(path, {replace})`, `back(fallback)`, `toast(msg, {action})`, `params`, `query`, `isCurrent()`, `install.mount(slot, opts)`).
 4. Écouteurs : sur l'élément `.screen` rendu (`container.firstElementChild`), **jamais sur `container`** (`#app-main` survit aux rendus → écouteurs empilés). Délégation pour les listes.
 5. Après un `await`, vérifier `ctx.isCurrent()` avant d'écrire dans le DOM (navigation rapide).
 6. `shared/` : pas de logique métier, n'importe aucune feature.
@@ -237,7 +240,7 @@ Repositories (tout `async`) : `getAll, getById, add, update(id, patch), remove(i
 
 ### PWA / service worker
 - `sw.js` : app shell précaché + *stale-while-revalidate* ; ne met jamais en cache Firestore/Auth (`*.googleapis.com` hors polices).
-- Après un changement du shell précaché (CSS, index), **incrémenter `CACHE_NAME`** (actuellement `alice-coiffure-v5`).
+- Après un changement du shell précaché (CSS, index), **incrémenter `CACHE_NAME`** (actuellement `alice-coiffure-v6`).
 
 ## Pièges connus
 

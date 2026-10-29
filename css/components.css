@@ -244,6 +244,49 @@
   margin-top: 2px;
 }
 
+/* ================= Installer l'app ================= */
+#install-slot:not(:empty) { margin-top: 18px; }
+#install-card:not(:empty) { margin-bottom: 16px; }
+.install {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 12px;
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+.install__icon {
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--paper);
+}
+.install__title { font-size: 16.5px; font-weight: 720; line-height: 1.25; }
+.install__text { font-size: 14.5px; color: var(--ink-2); margin-top: 3px; }
+.install__cta { margin-top: 12px; }
+.install__close { margin: -6px -8px 0 0; color: var(--ink-2); }
+.install--card { grid-template-columns: auto 1fr; outline-width: 1.5px; }
+
+.install-steps { display: flex; flex-direction: column; gap: 14px; margin-top: 4px; }
+.install-steps li { display: flex; align-items: flex-start; gap: 12px; font-size: 16px; line-height: 1.45; }
+.install-steps__num {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 600;
+}
+.install-steps__icon { width: 20px; height: 20px; vertical-align: -4px; color: var(--ink); }
+.install-steps__note { margin-top: 18px; font-size: 14px; color: var(--ink-2); }
+
 /* ================= Recherche ================= */
 .searchbar {
   position: sticky;

@@ -48,6 +48,7 @@ async function renderMenu(container, ctx) {
       <div class="page-head page-head--top">
         <h1 class="title-xl">Réglages</h1>
       </div>
+      <div id="install-card"></div>
       <div id="stats-slot" class="stats-slot"></div>
       <h2 class="section-title">Paramètres</h2>
       <ul class="roll settings-menu">
@@ -71,6 +72,8 @@ async function renderMenu(container, ctx) {
     if (row) ctx.navigate(`/reglages/${row.dataset.category}`);
   });
 
+  // Carte « Installer l'app » permanente (ne s'affiche que si l'installation est possible).
+  ctx.install.mount(container.querySelector('#install-card'), { dismissible: false });
   if (stats.clients) await renderStatsPanel(container.querySelector('#stats-slot'));
 }
 

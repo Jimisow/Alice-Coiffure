@@ -5,6 +5,10 @@ import { routes, tabs } from './app/routes.js';
 import { createRouter } from './app/router.js';
 import { registerServiceWorker } from './app/serviceWorker.js';
 import { startSync } from './data/index.js';
+import { initInstall } from './app/install.js';
+
+// Avant le 1er rendu : Android peut proposer l'installation très tôt.
+initInstall();
 
 createRouter({
   routes,

@@ -33,6 +33,7 @@ Stratégie *restreinte* : neutres + encre ; l'or n'apparaît que lorsqu'il signi
 - `.chip` (`aria-pressed` = sélectionnée → encre pleine), `.badge`, `.input`, `.stepper`, `.notice`, `.empty`, `.toast` (encre, action en or clair), `.tabbar` (onglet actif marqué d'un petit trou).
 - `.appt` : ticket de RDV avec talon horaire à gauche séparé par une perforation verticale.
 
+- Installation : `.install` (ticket à contour encre, pastille-icône téléphone, bouton primaire, croix) ; `.install--card` sans croix (Réglages) ; `.install-steps` (guide iPhone : pastilles numérotées encre + icônes Partager / Ajouter).
 - Fiche **à compléter** : `.badge--draft` dans les listes, `.bell` + `.bell__count` (cloche discrète en haut à droite de la souche, pastille encre) qui déplie un `.popover` (panneau ancré sous la cloche, pointe vers elle, animation depuis le coin haut droit) listant les fiches ; `.ticket--draft` (contour pointillé) seulement sur la fiche elle-même ; `.newclient` même langage dans le formulaire de RDV.
 - Durée libre : `.duree-custom__input` = une puce-champ « Autre » + aperçu « = 2 h 10 ».
 - `.field-btn` : bouton-champ (étiquette + valeur) pour date et heure ; `.chip--slot` créneau proposé (date + heure en mono).

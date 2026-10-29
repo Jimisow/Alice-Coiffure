@@ -7,10 +7,13 @@
 //   - navigate(path, opts)    aller à un écran ({ replace: true } = sans historique)
 //   - back(fallback)          retour arrière, ou `fallback` si on est arrivé ici directement
 //   - toast(message, opts)    message bref en bas d'écran (voir toast.js)
+//   - install.mount(slot, opts)  bandeau « Installer l'app » adapté à la plateforme (voir install.js)
+//   - install.available()     true si l'installation est possible ici
 // Les vues n'ont ainsi jamais besoin de toucher au DOM du shell.
 
 import { renderBottomNav } from './bottomNav.js';
 import { showToast } from './toast.js';
+import { mountInstall, isInstallable } from './install.js';
 
 function compile(path) {
   const keys = [];
@@ -56,6 +59,10 @@ export function createRouter({ routes, tabs, mainEl, navEl, toastEl }) {
       navigate,
       back,
       toast: (message, opts) => showToast(toastEl, message, opts),
+      install: {
+        mount: (slot, opts = {}) => mountInstall(slot, { ...opts, toast: (m) => showToast(toastEl, m) }),
+        available: isInstallable,
+      },
       // Une vue qui a lancé un traitement long vérifie qu'elle est toujours affichée.
       isCurrent: () => token === renderToken,
     };

@@ -162,6 +162,7 @@ export async function renderClientsView(container, ctx) {
         <img class="masthead__logo" src="images/Titre.png" alt="Alice Coiffure" draggable="false" />
         <p class="masthead__date">${capitalize(formatDateLong(todayISO()))}</p>
       </header>
+      <div id="install-slot"></div>
 
       <div class="page-head">
         <h1 class="title-xl">Clientes${clients.length ? ` <span class="title-count">${clients.length}</span>` : ''}</h1>
@@ -195,6 +196,9 @@ export async function renderClientsView(container, ctx) {
     ctx.toast('Clientes fictives ajoutées (à effacer dans Réglages → Données)');
     renderClientsView(container, ctx);
   });
+
+  // Bandeau « Installer l'app » (refusable), selon le téléphone.
+  ctx.install.mount(container.querySelector('#install-slot'));
 
   // Délégation sur l'écran (pas sur `container`, qui survit aux rendus).
   container.firstElementChild.addEventListener('click', (event) => {
