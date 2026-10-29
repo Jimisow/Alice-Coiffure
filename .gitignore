@@ -1,0 +1,15 @@
+# Secrets / config générée (Vercel : variables d'environnement FIREBASE_*)
+.env
+config/env.js
+
+# Build
+dist/
+node_modules/
+.vercel/
+
+# Sauvegardes zip locales (l'historique vit désormais dans git)
+Versions/
+
+# Outillage local de l'éditeur (skill de design, hooks)
+.claude/
+.gemini/

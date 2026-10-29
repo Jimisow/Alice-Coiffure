@@ -1,0 +1,20 @@
+{
+  "name": "Alice Coiffure",
+  "short_name": "Alice Coiffure",
+  "description": "Carnet clientes et cartes fidélité du salon Alice Coiffure.",
+  "start_url": "./index.html#/clientes",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#E6E4DE",
+  "theme_color": "#E6E4DE",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "images/Titre.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

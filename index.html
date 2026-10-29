@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Alice Coiffure</title>
+  <meta name="description" content="Carnet clientes et cartes fidélité du salon Alice Coiffure." />
+
+  <meta name="theme-color" content="#E6E4DE" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="images/Titre.png" type="image/png" />
+  <link rel="apple-touch-icon" href="images/Titre.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Alice Coiffure" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400..600&display=swap" />
+
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+  <!--
+    THESIS: le carnet d'Alice, pas un logiciel de caisse. Chaque cliente est une souche de carnet,
+    chaque passage un vrai trou de poinçon ; on refuse le tableau de bord à cartes + KPI.
+    OWN-WORLD: papier ticket blanc sur comptoir pierre (#E6E4DE), encre noire, or du logo réservé
+    à la fidélité ; perforations pointillées à encoches, bord festonné, trous noirs ombrés ;
+    Archivo condensé pour les titres, Geist Mono pour heures, numéros et compteurs.
+    STORY: Alice cherche une cliente, ouvre sa fiche, poinçonne la carte (3 gestes), offre la
+    récompense quand la carte est pleine, consulte et rappelle ses rendez-vous.
+    FIRST VIEWPORT: souche blanche avec le logo et la date, titre « Clientes » + bouton Nouvelle,
+    recherche collante, puis le rouleau alphabétique avec mini-cartes de points.
+    FORM: n°7 « ticket & poinçon » de la liste ancrée ; seed d794a3b6.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+  -->
+  <main id="app-main"></main>
+  <div id="app-nav"></div>
+  <div id="app-toast" aria-live="polite"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+/* Jetons de design — monde « carnet à souches & carte poinçonnée ».
+   Papier ticket blanc posé sur un comptoir pierre ; encre noire et or du
+   logo. L'or est RÉSERVÉ à la fidélité (récompense) : pas de décoration. */
+:root {
+  --ground: #E6E4DE;        /* comptoir pierre : fond de l'app */
+  --paper: #FFFFFF;         /* tickets, cartes, barres */
+  --paper-2: #F5F4F0;       /* puits à l'intérieur d'un ticket */
+  --ink: #17140F;           /* texte, action principale, trous poinçonnés */
+  --ink-2: #57524A;         /* texte secondaire (AA sur papier et pierre) */
+  --ink-3: #6F6A61;         /* placeholders, numéros des trous */
+  --rule: #D6D2C8;          /* filets, pointillés de perforation */
+  --rule-soft: #ECE9E3;
+
+  --gold: #B3873C;          /* or du logo : traits, contours */
+  --gold-strong: #8A6424;   /* fond des boutons or (texte blanc AA) */
+  --gold-ink: #775516;      /* texte or sur papier */
+  --gold-wash: #F7EEDB;
+  --gold-rule: #E2CB98;
+
+  --danger: #A8382B;
+  --danger-wash: #FBEAE6;
+
+  --hole: #1A1713;          /* intérieur d'un trou : la carte est posée sur le poste noir */
+
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow-ticket: 0 1px 1px rgba(23, 20, 15, 0.05), 0 8px 20px -10px rgba(23, 20, 15, 0.22);
+
+  --font: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --gutter: 16px;
+  --nav-h: calc(62px + env(safe-area-inset-bottom));
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}

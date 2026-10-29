@@ -1,0 +1,115 @@
+rules_version = '2';
+
+// ══════════════════════════════════════════════════════════════════════════════
+// RÈGLES FIRESTORE COMMUNES — projet Firebase « outils » (outils-6b1f4)
+//
+// ⚠ Firestore n'a QU'UN SEUL jeu de règles par base : publier ce fichier
+//   REMPLACE les règles de TOUTES les apps du projet. Il contient donc les
+//   règles de chaque app, chacune dans sa propre collection racine :
+//     • shops/…          → Micka Poulet   (dépôt E:\Projet DEV\App\MickaPoulet)
+//     • aliceCoiffure/…  → Alice Coiffure (dépôt E:\Projet DEV\site\Alice Coiffure)
+//   Ce fichier existe en COPIE IDENTIQUE dans les deux dépôts : toute
+//   modification doit être reportée dans l'autre avant de publier.
+//   Ajouter une app = ajouter un bloc avec SA collection racine, sans toucher
+//   aux autres.
+//
+// Tout ce qui n'est pas explicitement autorisé ci-dessous est REFUSÉ.
+// ══════════════════════════════════════════════════════════════════════════════
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // MICKA POULET — inchangé (voir son CLAUDE.md §8.7)
+    //  • Connexion ANONYME : `request.auth != null` ne protège rien à lui seul.
+    //  • L'isolation vient du CODE BOUTIQUE secret (26 car., 130 bits) ; aucun
+    //    listing de `shops` n'est autorisé.
+    //  • Rien ne peut être supprimé (suppressions logiques `deletedAt`).
+    //  • `stockMovements` est append-only (réécriture à l'identique seulement).
+    // ─────────────────────────────────────────────────────────────────────────
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function validShop(shopId) {
+      return shopId.matches('[a-z2-7]{26}');
+    }
+
+    function validEntity(entity) {
+      return entity in ['categories', 'products', 'businessDays', 'sales', 'dayReports', 'stockMovements'];
+    }
+
+    // Forme imposée d'un document : l'id doit être « {entity}__{recordId} », l'horodatage est celui du SERVEUR.
+    function validRecord(docId) {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['entity', 'recordId', 'payload', 'syncedAt', 'deviceId'])
+        && d.keys().hasAll(['entity', 'recordId', 'payload', 'syncedAt'])
+        && d.entity is string && validEntity(d.entity)
+        && d.recordId is string
+        && docId == d.entity + '__' + d.recordId
+        && d.payload is map
+        && d.syncedAt == request.time;
+    }
+
+    match /shops/{shopId}/records/{docId} {
+      allow read: if signedIn() && validShop(shopId);
+
+      allow create: if signedIn() && validShop(shopId) && validRecord(docId);
+
+      allow update: if signedIn() && validShop(shopId) && validRecord(docId)
+        && (resource.data.entity != 'stockMovements'
+            || request.resource.data.payload == resource.data.payload);
+
+      allow delete: if false;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // ALICE COIFFURE (voir son CLAUDE.md, « Données & synchronisation »)
+    //  • Connexion par E-MAIL / MOT DE PASSE (compte créé dans la console).
+    //    Chaque compte n'accède qu'à SON dossier aliceCoiffure/{uid} ; un compte
+    //    anonyme (Micka Poulet) n'y a pas accès.
+    //  • Données : aliceCoiffure/{uid}/{clients|appointments|visits|settings}/{id}
+    //  • Archive : aliceCoiffure/{uid}/archive/{collection}__{id} = copie de
+    //    TOUT ce qui est supprimé dans l'app (récupération).
+    //  • Rien ne peut être supprimé : une suppression = archive + pierre tombale.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    function aliceOwner(uid) {
+      return request.auth != null
+        && request.auth.uid == uid
+        && request.auth.token.firebase.sign_in_provider == 'password';
+    }
+
+    function aliceDataCollection(name) {
+      return name in ['clients', 'appointments', 'visits', 'settings'];
+    }
+
+    // Document de données : id cohérent, horodatage SERVEUR.
+    function aliceValidDoc(docId) {
+      let d = request.resource.data;
+      return d.id == docId && d.syncedAt == request.time;
+    }
+
+    // Entrée d'archive : id « {collection}__{id} », contenu complet, horodatage SERVEUR.
+    function aliceValidArchive(docId) {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['collection', 'id', 'data', 'deletedAt', 'archivedAt'])
+        && aliceDataCollection(d.collection)
+        && docId == d.collection + '__' + d.id
+        && d.data is map
+        && d.archivedAt == request.time;
+    }
+
+    match /aliceCoiffure/{uid}/{collection}/{docId} {
+      allow read: if aliceOwner(uid) && (aliceDataCollection(collection) || collection == 'archive');
+
+      allow create, update: if aliceOwner(uid) && (
+        (aliceDataCollection(collection) && aliceValidDoc(docId))
+        || (collection == 'archive' && aliceValidArchive(docId))
+      );
+
+      allow delete: if false;
+    }
+  }
+}
