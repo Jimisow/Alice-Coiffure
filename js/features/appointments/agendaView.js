@@ -4,7 +4,7 @@ import {
 } from './appointmentService.js';
 import { openPopover } from '../../shared/ui/popover.js';
 import { getFreeNow } from './availabilityService.js';
-import { PRESTATIONS } from './constants.js';
+import { getPrestationNames } from './prestationService.js';
 import { getClientById } from '../clients/index.js';
 import { addStamp, getLoyaltyRules, loyaltyState } from '../loyalty/index.js';
 import { openDrawer } from '../../shared/ui/drawer.js';
@@ -215,7 +215,7 @@ export async function renderAgendaView(container, ctx) {
       ctx.toast(`Terminé · carte de ${client.prenom} pleine : la récompense est à offrir`);
       return;
     }
-    const prestation = PRESTATIONS.includes(appointment.prestation) ? appointment.prestation : '';
+    const prestation = (await getPrestationNames()).includes(appointment.prestation) ? appointment.prestation : '';
     const stamp = async () => {
       const { client: updated, visit } = await addStamp(client.id, { prestation });
       if (ctx.isCurrent()) await renderAgendaView(container, ctx);

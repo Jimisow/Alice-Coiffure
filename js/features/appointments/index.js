@@ -7,7 +7,8 @@ import { renderAppointmentFormView } from './appointmentFormView.js';
 export {
   getAppointmentsByDate, getUpcomingForClient, addAppointment, removeAppointmentsOfClient, getNoShowsForClient,
 } from './appointmentService.js';
-export { PRESTATIONS } from './constants.js';
+export { getPrestations, getPrestationNames } from './prestationService.js';
+export { renderPrestationsEditor } from './prestationsEditor.js';
 export { renderOpeningHoursEditor } from './openingHoursEditor.js';
 export { describeOpeningDays } from './scheduleService.js';
 

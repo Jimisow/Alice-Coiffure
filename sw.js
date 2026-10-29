@@ -7,7 +7,7 @@
 // la dernière version des fichiers.
 // Firestore (requêtes réseau en direct) n'est jamais mis en cache.
 
-const CACHE_NAME = 'alice-coiffure-v7';
+const CACHE_NAME = 'alice-coiffure-v9';
 const APP_SHELL = [
   './',
   './index.html',
@@ -17,6 +17,8 @@ const APP_SHELL = [
   './css/components.css',
   './js/main.js',
   './images/Titre.png',
+  './images/icon-192.png',
+  './images/apple-touch-icon.png',
 ];
 
 self.addEventListener('install', (event) => {

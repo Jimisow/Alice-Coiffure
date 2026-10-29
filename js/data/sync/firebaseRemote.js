@@ -98,9 +98,12 @@ export async function createFirebaseRemote(onAuthChange) {
     configured: true,
     user: auth.currentUser,
 
+    // Renvoie { uid, email } du compte connecté.
     async signIn(email, password) {
       try {
-        await withTimeout(sdk.signInWithEmailAndPassword(auth, email, password), 'Connexion');
+        const credential = await withTimeout(sdk.signInWithEmailAndPassword(auth, email, password), 'Connexion');
+        remote.user = credential.user;
+        return { uid: credential.user.uid, email: credential.user.email };
       } catch (error) {
         throw new Error(describeFirebaseError(error));
       }

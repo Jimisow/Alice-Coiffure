@@ -145,6 +145,17 @@ export function getMeta() {
   return { ...state.meta, pending: state.outbox.length };
 }
 
+// Compte Firebase auquel appartient ce téléphone ({ uid, email } ou null).
+// Fixé à la 1ʳᵉ connexion ; conservé après une déconnexion.
+export function getOwner() {
+  return state.meta.owner || null;
+}
+
+export function setOwner({ uid, email }) {
+  state.meta.owner = { uid, email };
+  persist();
+}
+
 // ---- Sauvegarde / restauration / remise à zéro (Réglages) ----
 
 export function exportSnapshot() {

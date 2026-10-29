@@ -2,7 +2,7 @@ import { getClientById } from './clientService.js';
 import {
   getLoyaltyRules, renderLoyaltyCard, bindLoyaltyCard, undoStamp, getVisitHistory, loyaltyState, restoreStamp,
 } from '../loyalty/index.js';
-import { getUpcomingForClient, getNoShowsForClient, PRESTATIONS } from '../appointments/index.js';
+import { getUpcomingForClient, getNoShowsForClient, getPrestationNames } from '../appointments/index.js';
 import { buildReminderSmsLink } from '../reminders/index.js';
 import { icons } from '../../shared/ui/icons.js';
 import { topbar, bindBack, haptic } from '../../shared/ui/components.js';
@@ -128,12 +128,13 @@ function renderHistory(visits, showAll) {
 
 export async function renderClientDetailView(container, ctx, { justPunched = null, showAllHistory = false } = {}) {
   const clientId = ctx.params.id;
-  const [client, rules, upcoming, visits, noShows] = await Promise.all([
+  const [client, rules, upcoming, visits, noShows, prestations] = await Promise.all([
     getClientById(clientId),
     getLoyaltyRules(),
     getUpcomingForClient(clientId),
     getVisitHistory(clientId),
     getNoShowsForClient(clientId),
+    getPrestationNames(),
   ]);
   if (!ctx.isCurrent()) return;
   if (!client) {
@@ -161,8 +162,8 @@ export async function renderClientDetailView(container, ctx, { justPunched = nul
           <button type="button" class="btn btn--primary btn--block" data-edit>Compléter la fiche</button>
         </section>` : ''}
       ${renderLoyaltyCard(client, rules, {
-        prestations: PRESTATIONS,
-        prestationDuJour: todaysAppt && PRESTATIONS.includes(todaysAppt.prestation) ? todaysAppt.prestation : '',
+        prestations,
+        prestationDuJour: todaysAppt && prestations.includes(todaysAppt.prestation) ? todaysAppt.prestation : '',
         justPunched,
       })}
       ${renderHairNotes(client)}

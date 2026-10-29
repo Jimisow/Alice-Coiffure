@@ -7,7 +7,7 @@
 // à intervalle régulier. Sans configuration Firebase, il reste inactif et
 // l'app fonctionne en 100 % local.
 
-import { pendingChanges, acknowledge, mergeRemote, getMeta, onChange, COLLECTIONS } from '../local/store.js';
+import { pendingChanges, acknowledge, mergeRemote, getMeta, onChange, COLLECTIONS, getOwner, setOwner } from '../local/store.js';
 import { createFirebaseRemote } from './firebaseRemote.js';
 
 const PUSH_DELAY_MS = 2000;
@@ -90,9 +90,20 @@ export async function fetchArchive() {
   }
 }
 
+// Un téléphone appartient à UN compte : ses fiches locales partent dans le
+// dossier de ce compte. Se connecter avec un autre compte enverrait les fiches
+// de l'un dans le dossier de l'autre (ex. compte de test sur le téléphone
+// d'Alice) : on refuse et on se déconnecte aussitôt.
 export async function signIn(email, password) {
   if (!remote?.configured) throw new Error('Firebase n’est pas encore configuré.');
-  await remote.signIn(email, password);
+  const account = await remote.signIn(email, password);
+  const owner = getOwner();
+  if (owner && account?.uid && owner.uid !== account.uid) {
+    await remote.signOut();
+    emit();
+    throw new Error(`Ce téléphone contient les fiches du compte ${owner.email}. Connectez-vous avec ce compte (ou utilisez un autre téléphone / navigateur pour un autre compte).`);
+  }
+  if (account?.uid) setOwner(account);
   emit();
   syncNow();
 }

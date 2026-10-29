@@ -3,7 +3,9 @@ import {
   syncNow, signIn, signOut, getSyncStatus, onSyncStatus,
 } from './settingsService.js';
 import { getLoyaltyRules, saveLoyaltyRules, OBJECTIF_MIN, OBJECTIF_MAX } from '../loyalty/index.js';
-import { renderOpeningHoursEditor, describeOpeningDays } from '../appointments/index.js';
+import {
+  renderOpeningHoursEditor, describeOpeningDays, renderPrestationsEditor, getPrestations,
+} from '../appointments/index.js';
 import { renderStatsPanel } from '../stats/index.js';
 import { getDeletedClients, restoreClient, canLoadDemo } from '../clients/index.js';
 import { icons } from '../../shared/ui/icons.js';
@@ -14,6 +16,7 @@ import { escapeHtml, plural } from '../../shared/utils/formatUtils.js';
 // par ligne, puis une page par catégorie (#/reglages/<id>).
 const CATEGORIES = [
   { id: 'salon', title: 'Salon', icon: icons.clock, intro: 'Jours et horaires de travail : ils servent à proposer les créneaux libres.' },
+  { id: 'prestations', title: 'Prestations', icon: icons.scissors, intro: 'Ce que vous proposez et la durée habituelle de chaque prestation : elle se met toute seule quand vous prenez un rendez-vous.' },
   { id: 'fidelite', title: 'Carte fidélité', icon: icons.gift, intro: 'Règles appliquées à toutes les cartes.' },
   { id: 'sauvegarde', title: 'Sauvegarde', icon: icons.cloud, intro: 'Pour ne rien perdre, même en changeant de téléphone.' },
   { id: 'donnees', title: 'Données', icon: icons.users, intro: '' },
@@ -33,11 +36,12 @@ function cloudSummary(status) {
 // ================= Sommaire =================
 
 async function renderMenu(container, ctx) {
-  const [rules, jours] = await Promise.all([getLoyaltyRules(), describeOpeningDays()]);
+  const [rules, jours, prestations] = await Promise.all([getLoyaltyRules(), describeOpeningDays(), getPrestations()]);
   if (!ctx.isCurrent()) return;
   const stats = getDataStats();
   const summaries = {
     salon: jours,
+    prestations: `${plural(prestations.length, 'prestation')} · ${prestations.slice(0, 2).map((p) => p.nom).join(', ')}…`,
     fidelite: `${rules.objectif} tampons · ${rules.recompense}`,
     sauvegarde: cloudSummary(getSyncStatus()),
     donnees: `${plural(stats.clients, 'fiche')} · ${plural(stats.appointments, 'rendez-vous', 'rendez-vous')}`,
@@ -124,6 +128,11 @@ async function renderFidelite(slot, ctx) {
     event.target.value = saved.recompense;
     ctx.toast('Récompense enregistrée');
   });
+}
+
+async function renderPrestations(slot, ctx) {
+  slot.innerHTML = '<section class="ticket sheet"><div id="presta-slot"></div></section>';
+  await renderPrestationsEditor(slot.querySelector('#presta-slot'), { toast: ctx.toast });
 }
 
 async function renderSalon(slot, ctx) {
@@ -316,7 +325,7 @@ function renderDonnees(slot, ctx, rerender) {
   });
 }
 
-const RENDERERS = { salon: renderSalon, fidelite: renderFidelite, sauvegarde: renderSauvegarde, donnees: renderDonnees };
+const RENDERERS = { salon: renderSalon, prestations: renderPrestations, fidelite: renderFidelite, sauvegarde: renderSauvegarde, donnees: renderDonnees };
 
 async function renderCategory(container, ctx, category) {
   container.innerHTML = `

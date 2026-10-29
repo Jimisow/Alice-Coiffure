@@ -6,7 +6,8 @@ import { openSlotPicker } from './slotPickerSheet.js';
 import {
   getClientById, searchClients, findByPhone, validateClient, createProvisionalClient,
 } from '../clients/index.js';
-import { PRESTATIONS, DUREE_PAR_PRESTATION, DUREES_RAPIDES } from './constants.js';
+import { DUREES_RAPIDES } from './constants.js';
+import { getPrestations } from './prestationService.js';
 import { icons } from '../../shared/ui/icons.js';
 import { topbar, bindBack, perforation } from '../../shared/ui/components.js';
 import { openTimePicker } from '../../shared/ui/timePicker.js';
@@ -117,9 +118,11 @@ export async function renderAppointmentFormView(container, ctx) {
   const client = state.clientId ? await getClientById(state.clientId) : null;
   if (!client) state.clientId = null;
   const selectedHtml = client ? await renderSelectedClient(client) : '';
+  const prestations = await getPrestations();
+  const prestationNames = prestations.map((p) => p.nom);
   if (!ctx.isCurrent()) return;
 
-  const isOther = state.prestation && !PRESTATIONS.includes(state.prestation);
+  const isOther = state.prestation && !prestationNames.includes(state.prestation);
 
   container.innerHTML = `
     <div class="screen">
@@ -144,7 +147,7 @@ export async function renderAppointmentFormView(container, ctx) {
         <section class="ticket sheet">
           <h2 class="sheet__title" id="presta-label">Prestation</h2>
           <div class="chips" role="group" aria-labelledby="presta-label">
-            ${PRESTATIONS.map((p) => `
+            ${prestationNames.map((p) => `
               <button type="button" class="chip" data-presta="${escapeHtml(p)}" aria-pressed="${p === state.prestation}">${escapeHtml(p)}</button>
             `).join('')}
             <button type="button" class="chip" data-presta-other aria-pressed="${Boolean(isOther)}">Autre…</button>
@@ -305,13 +308,15 @@ export async function renderAppointmentFormView(container, ctx) {
 
   const dureePreview = $('#duree-preview');
 
-  // Puce ou durée par défaut : le champ libre se vide (la puce suffit).
+  // Puce ou durée habituelle d'une prestation : si une puce correspond, le
+  // champ libre se vide ; sinon (ex. 20 min) la durée s'affiche dans « Autre ».
   function setDuree(minutes, touched, { fromInput = false } = {}) {
     state.duree = minutes;
     if (touched) state.dureeTouched = true;
     if (!fromInput) {
-      dureeInput.value = '';
-      showDureePreview('');
+      const hasChip = DUREES_RAPIDES.includes(minutes);
+      dureeInput.value = hasChip ? '' : durationToInput(minutes);
+      showDureePreview(hasChip ? '' : `= ${formatDuration(minutes)}`);
     }
     syncDureeChips();
     refreshWhen();
@@ -345,8 +350,9 @@ export async function renderAppointmentFormView(container, ctx) {
     state.prestation = other ? '' : chip.dataset.presta;
     if (other) $('#rdv-other').focus();
     // Durée habituelle de la prestation, sauf si Alice l'a déjà réglée à la main.
-    if (!other && !state.dureeTouched && DUREE_PAR_PRESTATION[state.prestation]) {
-      setDuree(DUREE_PAR_PRESTATION[state.prestation], false);
+    const habituelle = prestations.find((p) => p.nom === state.prestation)?.duree;
+    if (!other && !state.dureeTouched && habituelle) {
+      setDuree(habituelle, false);
     }
   }));
   screen.querySelectorAll('[data-duree]').forEach((chip) =>

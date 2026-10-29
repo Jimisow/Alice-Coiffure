@@ -87,7 +87,8 @@ js/
   features/              UN DOSSIER PAR FONCTIONNALITÉ (index.js = API publique)
     clients/             liste+recherche, fiche, formulaire (création/édition/suppression), clientService
     loyalty/             règles + carte poinçonnée + mini-carte + historique (loyaltyService)
-    appointments/        agenda semaine, ticket RDV, formulaire RDV (+ nouvelle cliente à la volée), constants
+    appointments/        agenda semaine, ticket RDV, formulaire RDV (+ nouvelle cliente à la volée), constants (modèles),
+                         prestationService + prestationsEditor (Réglages → Prestations)
                          scheduleService (horaires de travail), availabilityService (créneaux libres),
                          slotPickerSheet (panneau calendrier + déroulé du jour), openingHoursEditor (Réglages)
     reminders/           lien SMS de rappel
@@ -143,7 +144,8 @@ Le moteur `sync/syncEngine.js` (inactif sans config) : au retour du réseau, 2 s
   - `aliceCoiffure/{uid}/archive/{collection}__{id}` : `{ collection, id, data, deletedAt, archivedAt }` = **copie complète de tout ce qui est supprimé** (fiche, passage, RDV annulé, « Tout effacer »). Micka Poulet vit sous `shops/…`.
 - **Rien n'est jamais effacé dans Firebase** : `delete` interdit par les règles. Une suppression = entrée d'archive + pierre tombale `{ id, deleted, deletedAt, updatedAt, syncedAt }` (propage la suppression aux autres appareils).
 - **Corbeille** (Réglages → Sauvegarde) : `data/trash.js` fusionne les pierres tombales locales (contenu gardé) et l'archive cloud (si connectée, utile sur un nouveau téléphone). « Restaurer » une fiche ramène aussi les passages/RDV supprimés en même temps (± 2 min, `clientService.restoreClient`).
-- **Auth** : e-mail / mot de passe, compte d'Alice créé dans la console (pas d'inscription dans l'app).
+- **Auth** : e-mail / mot de passe, comptes créés dans la console (pas d'inscription dans l'app). Comptes : **Alice** (production) et **Admin** (tests du propriétaire, son propre dossier — identifiants connus du propriétaire, jamais notés ici). Chaque compte a son dossier `aliceCoiffure/{uid}` : ils ne se voient pas.
+- **Un téléphone = un compte** (`store.meta.owner`, fixé à la 1ʳᵉ connexion) : `syncEngine.signIn` refuse et déconnecte un autre compte (sinon les fiches locales partiraient dans le mauvais dossier). Pour tester avec le compte Admin : un autre téléphone / navigateur / profil.
 - **Règles** : `firestore.rules` est un **fichier COMMUN** aux deux apps (une base = un seul jeu de règles ; publier remplace tout). Bloc Micka recopié **à l'identique** ; bloc Alice : accès au seul `aliceCoiffure/{son uid}` et seulement avec un compte `password` (les comptes anonymes de Micka n'y ont pas accès), collections imposées, horodatage serveur, `delete` interdit. ⚠ Le dépôt Micka Poulet a encore son ancien fichier (bloc Micka seul) : **le recopier là-bas** avant toute publication depuis ce dépôt-là, sinon les règles d'Alice disparaissent.
 - Vérifier : `npm run check:firebase` (lecture seule). Avec le compte d'Alice — sous Windows cmd : `set "EMAIL=…" & set "PASSWORD=…" & npm run check:firebase` ; PowerShell : `$env:EMAIL="…"; $env:PASSWORD="…"; npm run check:firebase` (la forme `EMAIL=… npm run …` ne marche qu'en bash).
 - Une pierre tombale reçue d'un autre appareil n'a pas de contenu : la Corbeille prend alors celui de l'archive cloud (`trash.js`, `hasContent`). La synchro se relance aussi quand l'app revient au premier plan (`visibilitychange`). Publier : console (copier-coller) ou `npm run deploy:rules`.
@@ -185,6 +187,7 @@ Appointment = { id: 'rdv-…', clientId, prestation, date: 'YYYY-MM-DD', heureDe
 Settings (doc unique id 'salon') = {
   fidelite: { objectif: 10, recompense: 'Une prestation offerte' },
   horaires: { '0'..'6': { ouvert, plages: [{ debut: 'HH:MM', fin: 'HH:MM' }] } },  // clé = getDay(), '0' = dimanche
+  prestations: [{ nom, duree }],   // Réglages → Prestations (absent = modèles de constants.js)
 }   // pas de tableaux imbriqués (refusés par Firestore). Défaut : mardi→samedi 9h-12h/14h-19h, samedi 9h-17h.
 ```
 
@@ -245,7 +248,8 @@ Repositories (tout `async`) : `getAll, getById, add, update(id, patch), remove(i
 
 ### PWA / service worker
 - `sw.js` : app shell précaché + *stale-while-revalidate* ; ne met jamais en cache Firestore/Auth (`*.googleapis.com` hors polices).
-- Après un changement du shell précaché (CSS, index), **incrémenter `CACHE_NAME`** (actuellement `alice-coiffure-v7`).
+- Après un changement du shell précaché (CSS, index), **incrémenter `CACHE_NAME`** (actuellement `alice-coiffure-v9`).
+- **Icônes d’app** (`images/`) : `icon-192`, `icon-512`, `icon-maskable-512` (dessin dans le cercle central 80 %), `apple-touch-icon` (180), `favicon-48`. Générées depuis `Titre.png` : recadrage serré sur « Alice », « COIFFURE » masqué (illisible en petit), traits épaissis. Un téléphone garde l’ancienne icône tant que l’app n’est pas supprimée puis réinstallée.
 
 ## Pièges connus
 
@@ -259,8 +263,8 @@ Repositories (tout `async`) : `getAll, getById, add, update(id, patch), remove(i
 ## Dette technique et pistes (par priorité)
 
 1. Indicateur de synchro discret sur l’accueil (état en ligne / en attente) ; aligner le `firestore.rules` du dépôt Micka Poulet.
-2. Icônes PWA dédiées 192/512 + maskable (aujourd'hui le logo carré sur fond blanc).
-3. Prestations / durées configurables dans Réglages (aujourd'hui `appointments/constants.js`).
+2. (fait le 29/10) Icônes d’app dédiées.
+3. (fait le 29/10) Prestations et durées réglables dans Réglages → Prestations (`prestationService` ; `constants.js` ne sert plus que de modèle d’origine).
 4. Vue « jour » de l'agenda en frise horaire ; RDV récurrents (mise en plis hebdomadaire).
 5. Toast d'annulation : il survit à la navigation (l'annulation reste valide, mais on pourrait le masquer en quittant la fiche).
 6. Import en masse des clientes (CSV) si Alice a un fichier existant.

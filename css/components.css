@@ -1254,6 +1254,13 @@
 .switch input:checked + .switch__track::after { transform: translateX(20px); }
 .switch input:focus-visible + .switch__track { outline: 2.5px solid var(--ink); outline-offset: 2px; }
 
+/* Prestations (Réglages) : nom à gauche, durée en mono à droite. */
+.presta-list { box-shadow: none; border: 1px solid var(--rule); margin-bottom: 4px; }
+.presta-row { min-height: 56px; }
+.presta-row__duree { font-family: var(--mono); font-size: 14.5px; color: var(--ink-2); white-space: nowrap; }
+.presta-form .field:first-child { margin-top: 4px; }
+.presta-form .btn-col { margin-top: 18px; }
+
 /* Lien vers le mode d'emploi (Réglages). */
 .settings-menu--help { margin-top: 12px; }
 a.settings-menu__row { color: inherit; text-decoration: none; }

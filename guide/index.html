@@ -6,7 +6,8 @@
   <title>Mode d'emploi · Alice Coiffure</title>
   <meta name="description" content="Le mode d'emploi de l'app Alice Coiffure, pas à pas, avec des images." />
   <meta name="theme-color" content="#E6E4DE" />
-  <link rel="icon" href="../images/Titre.png" type="image/png" />
+  <link rel="icon" href="../images/favicon-48.png" type="image/png" sizes="48x48" />
+  <link rel="apple-touch-icon" href="../images/apple-touch-icon.png" sizes="180x180" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet"
@@ -131,13 +132,15 @@
     .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
     .duo .shot { margin: 0; }
 
+    /* Encadré : le titre sur sa propre ligne, le texte dessous (un titre
+       long ne doit jamais écraser le texte en colonne). */
     .tip {
-      display: flex; gap: 10px; align-items: flex-start;
+      display: block;
       margin-top: 18px; padding: 14px 16px; border-radius: 12px;
       background: var(--gold-wash); box-shadow: inset 0 0 0 1px var(--gold-rule);
       font-size: 16.5px; color: var(--ink);
     }
-    .tip__mark { flex-shrink: 0; font-weight: 800; color: var(--gold-ink); }
+    .tip__mark { display: block; margin-bottom: 4px; font-weight: 800; color: var(--gold-ink); }
     .warn { background: var(--paper-2); box-shadow: inset 0 0 0 1px var(--rule); }
     .warn .tip__mark { color: var(--ink); }
 
@@ -330,7 +333,7 @@
       </ol>
       <figure class="shot"><img src="img/11-rdv-cliente.jpg" alt="Choix de la cliente en tapant son nom" loading="lazy" /></figure>
       <ol class="steps" start="3" style="counter-reset: step 2; margin-top: 18px">
-        <li class="step"><p>Choisis la <b>prestation</b> : la durée se met toute seule.</p></li>
+        <li class="step"><p>Choisis la <b>prestation</b> : la durée se met toute seule. (Ce sont <b>tes</b> prestations : tu les changes dans <b>Réglages → Prestations</b>, voir chapitre 11.)</p></li>
         <li class="step"><p>L'app te propose déjà les <b>prochains créneaux libres</b>. Appuie sur celui qui te va.</p></li>
       </ol>
       <figure class="shot"><img src="img/12-rdv-quand.jpg" alt="Les créneaux libres proposés" loading="lazy" /></figure>
@@ -366,7 +369,7 @@
       <div class="perf"></div>
       <p><b>Les 3 petits points</b> <span class="key key--light">···</span> d'un rendez-vous servent à le <b>modifier</b> ou à l'<b>annuler</b> (si la cliente a prévenu).</p>
       <figure class="shot shot--small"><img src="img/18-menu-rdv.jpg" alt="Menu d'un rendez-vous : Modifier, Annuler le rendez-vous" loading="lazy" /></figure>
-      <p class="tip warn"><span class="tip__mark">Une cliente n'est pas venue</span><span>et n'a pas prévenu ? Dans ce même menu, une fois l'heure passée, choisis <b>« Pas venue, sans prévenir »</b> (en petit, tout en bas). C'est noté sur sa fiche.</span></p>
+      <p class="tip warn"><span class="tip__mark">Une cliente n'est pas venue ?</span><span>Elle n'a pas prévenu ? Dans ce même menu, une fois l'heure passée, choisis <b>« Pas venue, sans prévenir »</b> (en petit, tout en bas). C'est noté sur sa fiche.</span></p>
       <p class="tip"><span class="tip__mark">Rappel</span><span>Le bouton <b>Rappel SMS</b> prépare un message tout écrit pour ta cliente : tu n'as plus qu'à l'envoyer.</span></p>
     </div>
   </section>
@@ -405,10 +408,23 @@
       <p>En haut, tes <b>chiffres du mois</b> : passages, clientes venues, récompenses. En dessous :</p>
       <ul class="steps" style="margin-top: 12px">
         <li class="step"><p><b>Salon</b> : tes jours et horaires de travail (pour que l'app te propose les bons créneaux).</p></li>
+        <li class="step"><p><b>Prestations</b> : ce que tu proposes et combien de temps ça prend.</p></li>
         <li class="step"><p><b>Carte fidélité</b> : le nombre de tampons et la récompense.</p></li>
         <li class="step"><p><b>Sauvegarde</b> : la connexion, la corbeille.</p></li>
       </ul>
       <figure class="shot shot--small"><img src="img/21-reglages.jpg" alt="L'écran Réglages avec les chiffres du mois" loading="lazy" /></figure>
+      <div class="perf"></div>
+      <p><b>Tes prestations</b> : au départ, l'app propose une liste toute prête (Coupe, Coloration, Balayage…). Tu la mets à ta façon :</p>
+      <ol class="steps" style="margin-top: 12px">
+        <li class="step"><p>Va dans <b>Réglages → Prestations</b>.</p></li>
+        <li class="step"><p>Appuie sur une prestation pour changer son <b>nom</b> ou sa <b>durée</b>, ou pour la <b>supprimer</b>.</p></li>
+        <li class="step"><p>Pour en créer une : <span class="key">+ Ajouter une prestation</span>, écris son nom, choisis sa durée, puis <span class="key">Enregistrer</span>.</p></li>
+      </ol>
+      <div class="duo">
+        <figure class="shot"><img src="img/22-prestations.jpg" alt="La liste des prestations avec leur durée" loading="lazy" /><figcaption>Ta liste</figcaption></figure>
+        <figure class="shot"><img src="img/23-prestation-modifier.jpg" alt="Ajout d'une prestation : nom et durée" loading="lazy" /><figcaption>Une nouvelle prestation</figcaption></figure>
+      </div>
+      <p class="tip"><span class="tip__mark">Une durée qui n'est pas dans les boutons ?</span><span>Tape-la dans la case <b>Autre</b> : <b>20</b> pour 20 minutes, <b>1.15</b> pour 1 h 15. Et si tu t'es perdue, <b>« Revenir à la liste d'origine »</b> remet tout comme au début.</span></p>
     </div>
   </section>
 

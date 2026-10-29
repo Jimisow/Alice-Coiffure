@@ -44,7 +44,7 @@ const res = await fetch(`${base}/${path}?pageSize=1`, {
 }).then((r) => r.json());
 
 const code = res.error?.status;
-if (!res.error) console.log('✓ Firestore répond et les règles autorisent Alice à lire son dossier.');
+if (!res.error) console.log('✓ Firestore répond et les règles autorisent ce compte à lire son dossier.');
 else if (code === 'PERMISSION_DENIED' && !auth.idToken) console.log('✓ Firestore existe (accès anonyme refusé, comme prévu).');
 else if (code === 'PERMISSION_DENIED') console.log('✗ Accès refusé : publiez firestore.rules (fichier commun) dans la console.');
 else console.log(`✗ Firestore : ${res.error.message}`);
