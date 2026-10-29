@@ -7,7 +7,7 @@
 // la dernière version des fichiers.
 // Firestore (requêtes réseau en direct) n'est jamais mis en cache.
 
-const CACHE_NAME = 'alice-coiffure-v6';
+const CACHE_NAME = 'alice-coiffure-v7';
 const APP_SHELL = [
   './',
   './index.html',

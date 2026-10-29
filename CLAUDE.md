@@ -33,6 +33,10 @@ npm run env        # régénère config/env.js depuis .env (dev)
 - Port : **5174** (`PORT=xxxx` pour changer). Le serveur refuse de servir `.env`, `.claude`, `Versions`…
 - Vérifier à **largeur mobile** (~390 px). Premier lancement : fichier vide → bouton « Essayer avec des clientes fictives » (ids `demo-…`, effaçables via Réglages → Tout effacer). **La démo n'est proposée qu'en développement** (localhost / réseau local, `clientService.canLoadDemo`) : en production elle enverrait de fausses fiches dans Firebase, où rien ne s'efface.
 
+## Mode d'emploi (`guide/`)
+
+Page autonome pour Alice (non développeuse, peu à l'aise avec le numérique) : tutoiement, une action par étape, mots des boutons en « touches », une capture par étape, mémo des 5 gestes, imprimable. Servie à **/guide/** (lien « Mode d'emploi » dans Réglages, inclus dans `npm run build`). Captures prises avec les clientes fictives sur iPhone simulé (puppeteer, 390 px, DPR 2, JPEG) : **à refaire si l'interface change** visiblement (mêmes noms de fichiers `guide/img/NN-*.jpg`).
+
 ## Dépôt & déploiement
 
 - **GitHub** : <https://github.com/Jimisow/Alice-Coiffure> (**public**, branche `main`), mis à jour le 29/10/2026 à la demande du propriétaire. Ne jamais pousser sans son accord explicite. Hors dépôt (`.gitignore`) : `.env`, `config/env.js`, `dist/`, `Versions/` (zips locaux), `.claude/` et `.gemini/` (outillage local), `.vercel/`, `.env.local`.
@@ -70,6 +74,7 @@ firestore.rules          règles à publier : salons/{uid}/… accessible au seu
 manifest.json, sw.js     PWA
 css/                     tokens.css (jetons), base.css (reset, shell), components.css (tous les composants)
 images/Titre.png         logo (fond blanc ; recadré en 2:1 par CSS dans .masthead)
+guide/                   MODE D'EMPLOI pour Alice (guide/index.html, captures dans guide/img/) → alice.kump.fr/guide/, lien dans Réglages
 tests/*.test.mjs         tests Node (fidélité, recherche, suppression…)
 js/
   main.js                assemble routeur + synchro + SW ; aucune logique métier
@@ -240,7 +245,7 @@ Repositories (tout `async`) : `getAll, getById, add, update(id, patch), remove(i
 
 ### PWA / service worker
 - `sw.js` : app shell précaché + *stale-while-revalidate* ; ne met jamais en cache Firestore/Auth (`*.googleapis.com` hors polices).
-- Après un changement du shell précaché (CSS, index), **incrémenter `CACHE_NAME`** (actuellement `alice-coiffure-v6`).
+- Après un changement du shell précaché (CSS, index), **incrémenter `CACHE_NAME`** (actuellement `alice-coiffure-v7`).
 
 ## Pièges connus
 

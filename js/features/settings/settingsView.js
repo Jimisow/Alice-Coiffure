@@ -63,6 +63,16 @@ async function renderMenu(container, ctx) {
           </button></li>
         `).join('')}
       </ul>
+      <ul class="roll settings-menu settings-menu--help">
+        <li><a class="row settings-menu__row" href="guide/">
+          <span class="settings-menu__icon icon">${icons.book}</span>
+          <span class="row__main">
+            <span class="row__name"><b>Mode d’emploi</b></span>
+            <span class="row__meta">Pas à pas, avec des images</span>
+          </span>
+          <span class="icon muted">${icons.chevronRight}</span>
+        </a></li>
+      </ul>
       <p class="colophon">Alice Coiffure · carnet clientes</p>
     </div>
   `;

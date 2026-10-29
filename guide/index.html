@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Mode d'emploi · Alice Coiffure</title>
+  <meta name="description" content="Le mode d'emploi de l'app Alice Coiffure, pas à pas, avec des images." />
+  <meta name="theme-color" content="#E6E4DE" />
+  <link rel="icon" href="../images/Titre.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400..600&display=swap" />
+  <link rel="stylesheet" href="../css/tokens.css" />
+  <style>
+    /* Mode d'emploi : même monde que l'app (papier, encre, or), lecture
+       confortable sur téléphone, imprimable. */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; background: var(--ground); }
+    body {
+      margin: 0;
+      background: var(--ground);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: 18px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    main { max-width: 620px; margin: 0 auto; padding: 0 16px 60px; }
+    h1, h2, h3, p, ol, ul, figure { margin: 0; }
+    a { color: inherit; }
+    b { font-weight: 700; }
+
+    /* ---- En-tête (souche blanche festonnée, comme l'app) ---- */
+    .head {
+      position: relative;
+      margin: 0 -16px;
+      padding: calc(14px + env(safe-area-inset-top)) 16px 30px;
+      background: var(--paper);
+      text-align: center;
+    }
+    .head::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -1px; height: 7px;
+      background: radial-gradient(circle at 7px 7px, var(--ground) 5px, transparent 5.6px) 0 0 / 14px 7px repeat-x;
+    }
+    .head__logo { width: 190px; aspect-ratio: 2 / 1; object-fit: cover; object-position: 50% 44%; display: block; margin: 0 auto; }
+    .head__title { font-size: 36px; line-height: 1; font-weight: 780; font-stretch: 75%; margin-top: 6px; }
+    .head__sub { font-family: var(--mono); font-size: 13px; letter-spacing: 0.05em; color: var(--ink-2); margin-top: 8px; }
+    .back-app {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 16px; padding: 10px 18px; border-radius: 999px;
+      background: var(--ink); color: var(--paper); text-decoration: none;
+      font-size: 15.5px; font-weight: 650;
+    }
+
+    /* ---- Ticket ---- */
+    .ticket {
+      position: relative;
+      background: var(--paper);
+      border-radius: 16px;
+      box-shadow: var(--shadow-ticket);
+      padding: 22px 20px;
+      margin-top: 22px;
+    }
+    .perf { position: relative; height: 0; margin: 22px -20px; border-top: 2px dashed var(--rule); }
+    .perf::before, .perf::after {
+      content: ''; position: absolute; top: -10px; width: 18px; height: 18px; border-radius: 50%; background: var(--ground);
+    }
+    .perf::before { left: -9px; }
+    .perf::after { right: -9px; }
+
+    /* ---- Dédicace ---- */
+    .dedicace { margin-top: 30px; text-align: center; }
+    .dedicace__to { font-size: 15px; font-weight: 650; color: var(--gold-ink); letter-spacing: 0.02em; }
+    .dedicace__text { font-size: 19px; line-height: 1.6; margin-top: 10px; }
+    .dedicace__sign { margin-top: 14px; font-size: 16px; color: var(--ink-2); font-style: italic; }
+    .punch-row { display: flex; justify-content: center; gap: 9px; margin-top: 18px; }
+    .punch-row i { width: 20px; height: 20px; border-radius: 50%; background: var(--hole); box-shadow: inset 0 3px 4px rgba(0,0,0,.8), 0 1px 0 #fff; }
+    .punch-row i.empty { background: none; box-shadow: inset 0 0 0 1.5px var(--rule); }
+    .punch-row i.gift { background: var(--gold-strong); box-shadow: inset 0 3px 4px rgba(0,0,0,.35), 0 1px 0 #fff; }
+
+    /* ---- Sommaire ---- */
+    .toc__title { font-size: 21px; font-weight: 760; font-stretch: 80%; }
+    .toc ol { list-style: none; padding: 0; margin-top: 10px; }
+    .toc li + li { border-top: 1px solid var(--rule-soft); }
+    .toc a { display: flex; align-items: center; gap: 12px; padding: 11px 0; text-decoration: none; font-size: 17px; }
+    .toc .num { flex-shrink: 0; }
+
+    .num {
+      display: inline-grid; place-items: center;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--ink); color: var(--paper);
+      font-family: var(--mono); font-size: 15px; font-weight: 600;
+    }
+
+    /* ---- Chapitres ---- */
+    .chapter { margin-top: 44px; scroll-margin-top: 16px; }
+    .chapter__head { display: flex; align-items: center; gap: 12px; }
+    .chapter__head .num { width: 40px; height: 40px; font-size: 18px; }
+    .chapter__title { font-size: 28px; line-height: 1.05; font-weight: 780; font-stretch: 75%; }
+    .chapter__intro { margin-top: 10px; color: var(--ink-2); }
+
+    .steps { list-style: none; padding: 0; counter-reset: step; }
+    .step { counter-increment: step; display: grid; grid-template-columns: 30px 1fr; gap: 12px; }
+    .step + .step { margin-top: 16px; }
+    .step::before {
+      content: counter(step);
+      display: grid; place-items: center;
+      width: 30px; height: 30px; border-radius: 50%;
+      box-shadow: inset 0 0 0 2px var(--ink);
+      font-family: var(--mono); font-size: 14px; font-weight: 600;
+      margin-top: 1px;
+    }
+
+    .shot { margin: 18px auto 0; text-align: center; }
+    .shot img {
+      display: block;
+      width: 100%;
+      max-width: 340px;
+      height: auto;
+      margin: 0 auto;
+      border-radius: 18px;
+      border: 1px solid var(--rule);
+      box-shadow: 0 10px 28px -14px rgba(23, 20, 15, 0.35);
+      background: var(--paper);
+    }
+    .shot--small img { max-width: 300px; }
+    .shot figcaption { font-size: 14.5px; color: var(--ink-2); margin-top: 8px; }
+    .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+    .duo .shot { margin: 0; }
+
+    .tip {
+      display: flex; gap: 10px; align-items: flex-start;
+      margin-top: 18px; padding: 14px 16px; border-radius: 12px;
+      background: var(--gold-wash); box-shadow: inset 0 0 0 1px var(--gold-rule);
+      font-size: 16.5px; color: var(--ink);
+    }
+    .tip__mark { flex-shrink: 0; font-weight: 800; color: var(--gold-ink); }
+    .warn { background: var(--paper-2); box-shadow: inset 0 0 0 1px var(--rule); }
+    .warn .tip__mark { color: var(--ink); }
+
+    .key {
+      display: inline-block;
+      padding: 1px 9px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 0.92em;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+    .key--light { background: var(--paper); color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--rule); }
+    .key--gold { background: var(--gold-strong); color: #fff; }
+
+    /* ---- Mémo final ---- */
+    .memo__title { font-size: 24px; font-weight: 780; font-stretch: 78%; text-align: center; }
+    .memo ul { list-style: none; padding: 0; margin-top: 14px; }
+    .memo li { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; font-size: 17px; }
+    .memo li + li { border-top: 1px solid var(--rule-soft); }
+    .memo .num { flex-shrink: 0; width: 28px; height: 28px; font-size: 13px; }
+    .end { text-align: center; margin-top: 30px; color: var(--ink-2); font-size: 15.5px; }
+
+    @media (max-width: 420px) {
+      .duo { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; font-size: 13pt; }
+      .back-app, .toc { display: none; }
+      .ticket, .shot img { box-shadow: none; }
+      .chapter { break-inside: avoid-page; }
+      .shot img { max-width: 260px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+
+  <header class="head">
+    <img class="head__logo" src="../images/Titre.png" alt="Alice Coiffure" />
+    <h1 class="head__title">Mode d'emploi</h1>
+    <p class="head__sub">CARNET · FIDÉLITÉ · AGENDA</p>
+    <a class="back-app" href="../">← Ouvrir l'app</a>
+  </header>
+
+  <section class="ticket dedicace" aria-label="Dédicace">
+    <p class="dedicace__to">Pour Alice</p>
+    <p class="dedicace__text">
+      Fini les cartes en carton qui se perdent et le stock qui s'épuise.
+      Tes clientes, leurs petites habitudes et leurs tampons sont maintenant
+      dans ta poche, rangés et à l'abri. Prends ton temps : tout se rattrape,
+      rien ne se perd.
+    </p>
+    <div class="punch-row" aria-hidden="true">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="empty"></i><i class="empty"></i><i class="gift"></i>
+    </div>
+    <p class="dedicace__sign">Avec toute mon affection, ton beau-frère</p>
+  </section>
+
+  <nav class="ticket toc" aria-labelledby="toc-title">
+    <h2 class="toc__title" id="toc-title">Ce que tu trouveras ici</h2>
+    <ol>
+      <li><a href="#installer"><span class="num">1</span>Mettre l'app sur ton téléphone</a></li>
+      <li><a href="#connexion"><span class="num">2</span>Te connecter (une seule fois)</a></li>
+      <li><a href="#cliente"><span class="num">3</span>Ajouter une cliente</a></li>
+      <li><a href="#retrouver"><span class="num">4</span>Retrouver une cliente</a></li>
+      <li><a href="#tampon"><span class="num">5</span>Tamponner la carte fidélité</a></li>
+      <li><a href="#cadeau"><span class="num">6</span>Offrir la récompense</a></li>
+      <li><a href="#rdv"><span class="num">7</span>Prendre un rendez-vous</a></li>
+      <li><a href="#journee"><span class="num">8</span>Ta journée dans l'agenda</a></li>
+      <li><a href="#cloche"><span class="num">9</span>La petite cloche</a></li>
+      <li><a href="#secours"><span class="num">10</span>Une fiche effacée ? Un nouveau téléphone ?</a></li>
+      <li><a href="#reglages"><span class="num">11</span>Tes réglages</a></li>
+    </ol>
+  </nav>
+
+  <!-- 1 ─────────────────────────────────────────────── -->
+  <section class="chapter" id="installer">
+    <div class="chapter__head"><span class="num">1</span><h2 class="chapter__title">Mettre l'app sur ton téléphone</h2></div>
+    <p class="chapter__intro">À faire une seule fois. Ensuite, l'app a son icône comme les autres et s'ouvre même sans Internet.</p>
+    <div class="ticket">
+      <ol class="steps">
+        <li class="step"><p>Ouvre <b>alice.kump.fr</b> dans <b>Safari</b> (iPhone) ou <b>Chrome</b> (Android).</p></li>
+        <li class="step"><p>En haut, appuie sur le bouton <span class="key">Installer</span>.</p></li>
+      </ol>
+      <figure class="shot shot--small"><img src="img/01-accueil.jpg" alt="Accueil de l'app avec le bandeau Installer l'app sur ce téléphone" loading="lazy" /></figure>
+      <div class="perf"></div>
+      <p><b>Sur iPhone</b>, un petit guide s'ouvre. Suis les 3 étapes :
+        <b>Partager</b> (le carré avec une flèche, en bas de Safari) →
+        <b>Sur l'écran d'accueil</b> → <b>Ajouter</b>.</p>
+      <figure class="shot shot--small"><img src="img/02-installer-iphone.jpg" alt="Le guide d'installation sur iPhone en 3 étapes" loading="lazy" /></figure>
+      <p class="tip"><span class="tip__mark">Astuce</span><span>Sur Android, c'est encore plus simple : le téléphone te demande juste de confirmer.</span></p>
+      <p class="tip warn"><span class="tip__mark">Important</span><span>Ensuite, ouvre toujours l'app avec son <b>icône</b>, pas par Internet : tes fiches y sont mieux protégées.</span></p>
+    </div>
+  </section>
+
+  <!-- 2 ─────────────────────────────────────────────── -->
+  <section class="chapter" id="connexion">
+    <div class="chapter__head"><span class="num">2</span><h2 class="chapter__title">Te connecter (une seule fois)</h2></div>
+    <p class="chapter__intro">C'est ce qui met tes fiches à l'abri en ligne. Si un jour tu changes de téléphone, tu retrouves tout.</p>
+    <div class="ticket">
+      <ol class="steps">
+        <li class="step"><p>En bas, appuie sur <span class="key key--light">Réglages</span>, puis sur <b>Sauvegarde</b>.</p></li>
+        <li class="step"><p>Tape ton <b>e-mail</b> et ton <b>mot de passe</b>, puis <span class="key">Se connecter</span>.</p></li>
+      </ol>
+      <figure class="shot shot--small"><img src="img/03-connexion.jpg" alt="Formulaire de connexion de la sauvegarde en ligne" loading="lazy" /></figure>
+      <p class="tip"><span class="tip__mark">À retenir</span><span>Tu ne le fais <b>qu'une fois</b> : le téléphone s'en souvient. Garde bien ton mot de passe noté quelque part, c'est la clé de tes fiches.</span></p>
+    </div>
+  </section>
+
+  <!-- 3 ─────────────────────────────────────────────── -->
+  <section class="chapter" id="cliente">
+    <div class="chapter__head"><span class="num">3</span><h2 class="chapter__title">Ajouter une cliente</h2></div>
+    <p class="chapter__intro">Le plus simple : crée la fiche quand la cliente vient, avec sa vieille carte en carton sous les yeux.</p>
+    <div class="ticket">
+      <ol class="steps">
+        <li class="step"><p>Sur l'écran <b>Clientes</b>, appuie sur <span class="key">+ Nouvelle</span>.</p></li>
+        <li class="step"><p>Écris son <b>prénom</b>, son <b>nom</b> et son <b>téléphone</b> (pour lui envoyer les rappels).</p></li>
+      </ol>
+      <figure class="shot"><img src="img/04-fiche-identite.jpg" alt="Formulaire nouvelle cliente : prénom, nom, téléphone" loading="lazy" /></figure>
+      <ol class="steps" start="3" style="counter-reset: step 2; margin-top: 18px">
+        <li class="step"><p>Note ses <b>cheveux</b> (appuie sur les petits mots tout prêts) et tes <b>notes</b> : allergies, couleur, préférences…</p></li>
+        <li class="step"><p>Avec les boutons <span class="key key--light">−</span> et <span class="key key--light">+</span>, mets le <b>nombre de tampons</b> qu'elle avait déjà sur sa carte en carton.</p></li>
+      </ol>
+      <figure class="shot"><img src="img/05-fiche-tampons.jpg" alt="Choix du nombre de tampons déjà sur la carte carton" loading="lazy" /></figure>
+      <ol class="steps" start="5" style="counter-reset: step 4; margin-top: 18px">
+        <li class="step"><p>En bas, appuie sur <span class="key">Créer la fiche</span>. C'est tout !</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4 ─────────────────────────────────────────────── -->
+  <section class="chapter" id="retrouver">
+    <div class="chapter__head"><span class="num">4</span><h2 class="chapter__title">Retrouver une cliente</h2></div>
+    <div class="ticket">
+      <ol class="steps">
+        <li class="step"><p>Sur l'écran <b>Clientes</b>, tape les premières lettres de son <b>prénom</b>, de son <b>nom</b>… ou quelques chiffres de son <b>téléphone</b>.</p></li>
+        <li class="step"><p>Appuie sur son nom : sa fiche s'ouvre.</p></li>
+      </ol>
+      <figure class="shot shot--small"><img src="img/06-recherche.jpg" alt="Recherche d'une cliente en tapant quelques lettres" loading="lazy" /></figure>
+      <p class="tip"><span class="tip__mark">Astuce</span><span>Pas besoin des accents ni des majuscules : « helene » trouve « Hélène ». Les petits points à droite montrent sa carte fidélité.</span></p>
+    </div>
+  </section>
+
+  <!-- 5 ─────────────────────────────────────────────── -->
+  <section class="chapter" id="tampon">
+    <div class="chapter__head"><span class="num">5</span><h2 class="chapter__title">Tamponner la carte fidélité</h2></div>
+    <p class="chapter__intro">Ta carte en carton, en mieux : chaque passage fait un vrai petit trou.</p>
+    <div class="ticket">
+      <ol class="steps">
+        <li class="step"><p>Ouvre la fiche de la cliente.</p></li>
+        <li class="step"><p>Si tu veux, choisis la <b>prestation du jour</b> (ce n'est pas obligatoire).</p></li>
+        <li class="step"><p>Appuie sur <span class="key">Poinçonner un passage</span>.</p></li>
+      </ol>
+      <figure class="shot"><img src="img/07-carte.jpg" alt="La carte fidélité d'une cliente avec le bouton Poinçonner un passage" loading="lazy" /></figure>
+      <figure class="shot"><img src="img/08-poincon.jpg" alt="Un nouveau trou se fait dans la carte" loading="lazy" /><figcaption>Un nouveau trou apparaît… et la petite pastille de carton tombe.</figcaption></figure>
+      <div class="perf"></div>
+      <p><b>Tu t'es trompée ?</b> Pas de panique :</p>
+      <ul class="steps" style="margin-top: 10px">
+        <li class="step" style="--x:0"><p>juste après, appuie sur <span class="key key--gold">Annuler</span> dans le message noir en bas ;</p></li>
+        <li class="step"><p>plus tard, appuie sur le petit bouton <span class="key key--light">−1</span> sous le compteur.</p></li>
+      </ul>
+      <figure class="shot shot--small"><img src="img/09-annuler.jpg" alt="Message Passage enregistré avec le bouton Annuler, et le bouton moins un" loading="lazy" /></figure>
+    </div>
+  </section>
+
+  <!-- 6 ─────────────────────────────────────────────── -->
+  <section class="chapter" id="cadeau">
+    <div class="chapter__head"><span class="num">6</span><h2 class="chapter__title">Offrir la récompense</h2></div>
+    <div class="ticket">
+      <p>Quand les <b>10 trous</b> sont faits, la carte devient <b>dorée</b>.</p>
+      <ol class="steps" style="margin-top: 14px">
+        <li class="step"><p>Offre sa récompense à ta cliente.</p></li>
+        <li class="step"><p>Appuie sur <span class="key key--gold">Offrir la récompense</span>, puis confirme.</p></li>
+        <li class="step"><p>Une <b>nouvelle carte</b> toute neuve commence.</p></li>
+      </ol>
+      <figure class="shot"><img src="img/10-recompense.jpg" alt="Carte pleine avec le bouton Offrir la récompense" loading="lazy" /></figure>
+      <p class="tip"><span class="tip__mark">Astuce</span><span>Tu peux changer la récompense (ou le nombre de tampons) dans <b>Réglages → Carte fidélité</b>.</span></p>
+    </div>
+  </section>
+
+  <!-- 7 ─────────────────────────────────────────────── -->
+  <section class="chapter" id="rdv">
+    <div class="chapter__head"><span class="num">7</span><h2 class="chapter__title">Prendre un rendez-vous</h2></div>
+    <div class="ticket">
+      <ol class="steps">
+        <li class="step"><p>En bas, appuie sur <span class="key key--light">Agenda</span>, puis sur <span class="key">+ Rendez-vous</span>.</p></li>
+        <li class="step"><p>Tape le nom de la cliente et <b>appuie sur son nom</b> dans la liste.</p></li>
+      </ol>
+      <figure class="shot"><img src="img/11-rdv-cliente.jpg" alt="Choix de la cliente en tapant son nom" loading="lazy" /></figure>
+      <ol class="steps" start="3" style="counter-reset: step 2; margin-top: 18px">
+        <li class="step"><p>Choisis la <b>prestation</b> : la durée se met toute seule.</p></li>
+        <li class="step"><p>L'app te propose déjà les <b>prochains créneaux libres</b>. Appuie sur celui qui te va.</p></li>
+      </ol>
+      <figure class="shot"><img src="img/12-rdv-quand.jpg" alt="Les créneaux libres proposés" loading="lazy" /></figure>
+      <ol class="steps" start="5" style="counter-reset: step 4; margin-top: 18px">
+        <li class="step"><p>Tu veux voir ta semaine ? Appuie sur la <b>Date</b> : un calendrier s'ouvre, avec tes rendez-vous et les heures libres. Les jours rayés sont tes jours de repos.</p></li>
+      </ol>
+      <div class="duo">
+        <figure class="shot"><img src="img/13-planning.jpg" alt="Le calendrier avec les créneaux libres" loading="lazy" /><figcaption>Le planning</figcaption></figure>
+        <figure class="shot"><img src="img/14-heure.jpg" alt="Le choix de l'heure en deux touches" loading="lazy" /><figcaption>L'heure : un chiffre, puis les minutes</figcaption></figure>
+      </div>
+      <ol class="steps" start="6" style="counter-reset: step 5; margin-top: 18px">
+        <li class="step"><p>Appuie sur <span class="key">Ajouter à l'agenda</span>.</p></li>
+      </ol>
+      <div class="perf"></div>
+      <p><b>Une nouvelle cliente au téléphone ?</b> Tape simplement son nom : si elle n'existe pas encore, un petit formulaire apparaît. Sa fiche est créée avec le rendez-vous, tu la compléteras plus tard.</p>
+      <figure class="shot"><img src="img/15-rdv-nouvelle-cliente.jpg" alt="Formulaire nouvelle cliente directement dans le rendez-vous" loading="lazy" /></figure>
+      <p class="tip"><span class="tip__mark">Durée spéciale ?</span><span>Dans la case <b>Autre</b>, tape <b>2</b> pour 2 heures, <b>2.10</b> pour 2 h 10, ou <b>45</b> pour 45 minutes.</span></p>
+    </div>
+  </section>
+
+  <!-- 8 ─────────────────────────────────────────────── -->
+  <section class="chapter" id="journee">
+    <div class="chapter__head"><span class="num">8</span><h2 class="chapter__title">Ta journée dans l'agenda</h2></div>
+    <p class="chapter__intro">La cliente du moment est entourée de noir. En bas à gauche, tu vois sa carte fidélité (ex. 9/10).</p>
+    <div class="ticket">
+      <figure class="shot shot--small" style="margin-top: 0"><img src="img/16-agenda.jpg" alt="L'agenda du jour avec la cliente en cours" loading="lazy" /></figure>
+      <div class="perf"></div>
+      <p><b>Tu as fini ?</b> Appuie sur <span class="key">Terminé</span>. L'app te demande si tu veux tamponner sa carte : <span class="key">Oui, poinçonner</span>.</p>
+      <figure class="shot shot--small"><img src="img/17-termine.jpg" alt="Rendez-vous terminé : poinçonner sa carte ?" loading="lazy" /></figure>
+      <div class="perf"></div>
+      <p><b>Le téléphone sonne et tu as bientôt fini ?</b> Appuie sur <span class="key key--light">Je finis bientôt</span>, choisis <b>dans combien de minutes</b> (5, 10, 15…), et le rendez-vous de la personne s'ouvre déjà à la bonne heure.</p>
+      <p style="margin-top: 14px"><b>Une place se libère ?</b> Un bandeau <b>« Libre maintenant »</b> apparaît en haut : <span class="key">Placer quelqu'un maintenant</span>.</p>
+      <div class="perf"></div>
+      <p><b>Les 3 petits points</b> <span class="key key--light">···</span> d'un rendez-vous servent à le <b>modifier</b> ou à l'<b>annuler</b> (si la cliente a prévenu).</p>
+      <figure class="shot shot--small"><img src="img/18-menu-rdv.jpg" alt="Menu d'un rendez-vous : Modifier, Annuler le rendez-vous" loading="lazy" /></figure>
+      <p class="tip warn"><span class="tip__mark">Une cliente n'est pas venue</span><span>et n'a pas prévenu ? Dans ce même menu, une fois l'heure passée, choisis <b>« Pas venue, sans prévenir »</b> (en petit, tout en bas). C'est noté sur sa fiche.</span></p>
+      <p class="tip"><span class="tip__mark">Rappel</span><span>Le bouton <b>Rappel SMS</b> prépare un message tout écrit pour ta cliente : tu n'as plus qu'à l'envoyer.</span></p>
+    </div>
+  </section>
+
+  <!-- 9 ─────────────────────────────────────────────── -->
+  <section class="chapter" id="cloche">
+    <div class="chapter__head"><span class="num">9</span><h2 class="chapter__title">La petite cloche</h2></div>
+    <div class="ticket">
+      <p>En haut à droite de l'accueil, la cloche montre un <b>chiffre</b> quand quelque chose t'attend :</p>
+      <ul class="steps" style="margin-top: 12px">
+        <li class="step"><p>une <b>récompense à offrir</b> (carte pleine) ;</p></li>
+        <li class="step"><p>une <b>fiche à compléter</b> (créée en prenant un rendez-vous).</p></li>
+      </ul>
+      <figure class="shot shot--small"><img src="img/19-cloche.jpg" alt="La cloche des notifications ouverte" loading="lazy" /></figure>
+      <p style="margin-top: 14px">Appuie sur un nom pour y aller directement.</p>
+    </div>
+  </section>
+
+  <!-- 10 ─────────────────────────────────────────────── -->
+  <section class="chapter" id="secours">
+    <div class="chapter__head"><span class="num">10</span><h2 class="chapter__title">Une fiche effacée ? Un nouveau téléphone ?</h2></div>
+    <p class="chapter__intro">Rien n'est jamais vraiment perdu.</p>
+    <div class="ticket">
+      <p><b>Tu as supprimé une fiche par erreur ?</b> Va dans <b>Réglages → Sauvegarde → Corbeille</b> et appuie sur <span class="key key--light">Restaurer</span>. Elle revient avec ses tampons et ses rendez-vous.</p>
+      <figure class="shot"><img src="img/20-corbeille.jpg" alt="La corbeille avec le bouton Restaurer" loading="lazy" /></figure>
+      <div class="perf"></div>
+      <p><b>Nouveau téléphone ?</b> Installe l'app (chapitre 1), connecte-toi (chapitre 2) : <b>toutes tes clientes reviennent</b> toutes seules.</p>
+      <p class="tip"><span class="tip__mark">Pas d'Internet au salon ?</span><span>Aucun souci : tout est enregistré dans ton téléphone, et la sauvegarde se fait toute seule dès que le réseau revient.</span></p>
+    </div>
+  </section>
+
+  <!-- 11 ─────────────────────────────────────────────── -->
+  <section class="chapter" id="reglages">
+    <div class="chapter__head"><span class="num">11</span><h2 class="chapter__title">Tes réglages</h2></div>
+    <div class="ticket">
+      <p>En haut, tes <b>chiffres du mois</b> : passages, clientes venues, récompenses. En dessous :</p>
+      <ul class="steps" style="margin-top: 12px">
+        <li class="step"><p><b>Salon</b> : tes jours et horaires de travail (pour que l'app te propose les bons créneaux).</p></li>
+        <li class="step"><p><b>Carte fidélité</b> : le nombre de tampons et la récompense.</p></li>
+        <li class="step"><p><b>Sauvegarde</b> : la connexion, la corbeille.</p></li>
+      </ul>
+      <figure class="shot shot--small"><img src="img/21-reglages.jpg" alt="L'écran Réglages avec les chiffres du mois" loading="lazy" /></figure>
+    </div>
+  </section>
+
+  <!-- Mémo ─────────────────────────────────────────────── -->
+  <section class="ticket memo" aria-labelledby="memo-title" style="margin-top: 48px">
+    <h2 class="memo__title" id="memo-title">Le mémo à garder en tête</h2>
+    <ul>
+      <li><span class="num">1</span><span>Une cliente arrive → <b>Clientes</b>, tape son nom.</span></li>
+      <li><span class="num">2</span><span>Elle repart → <span class="key">Poinçonner un passage</span></span></li>
+      <li><span class="num">3</span><span>Carte dorée → <span class="key key--gold">Offrir la récompense</span></span></li>
+      <li><span class="num">4</span><span>Un appel → <b>Agenda</b>, puis <span class="key">+ Rendez-vous</span></span></li>
+      <li><span class="num">5</span><span>Une erreur → <span class="key key--gold">Annuler</span>, <span class="key key--light">−1</span> ou la <b>Corbeille</b>. Tout se rattrape !</span></li>
+    </ul>
+  </section>
+
+  <p class="end">Une question ? Appelle ton beau-frère 😉<br /><a class="back-app" href="../">← Ouvrir l'app</a></p>
+
+</main>
+</body>
+</html>

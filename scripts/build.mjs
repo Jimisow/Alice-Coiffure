@@ -13,7 +13,7 @@ import { generateEnv } from './env.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
-const PUBLIC = ['index.html', 'manifest.json', 'sw.js', 'css', 'js', 'images'];
+const PUBLIC = ['index.html', 'manifest.json', 'sw.js', 'css', 'js', 'images', 'guide'];
 
 rmSync(dist, { recursive: true, force: true });
 mkdirSync(join(dist, 'config'), { recursive: true });

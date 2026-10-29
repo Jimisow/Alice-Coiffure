@@ -1253,3 +1253,7 @@
 .switch input:checked + .switch__track { background: var(--ink); }
 .switch input:checked + .switch__track::after { transform: translateX(20px); }
 .switch input:focus-visible + .switch__track { outline: 2.5px solid var(--ink); outline-offset: 2px; }
+
+/* Lien vers le mode d'emploi (Réglages). */
+.settings-menu--help { margin-top: 12px; }
+a.settings-menu__row { color: inherit; text-decoration: none; }

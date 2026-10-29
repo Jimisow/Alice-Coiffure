@@ -33,7 +33,8 @@ const firebaseReady = generateEnv();
 
 createServer(async (req, res) => {
   const path = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-  const file = normalize(join(root, path === '/' ? 'index.html' : path));
+  // Un dossier (« /guide/ ») sert son index.html, comme Vercel.
+  const file = normalize(join(root, path.endsWith('/') ? `${path}index.html` : path));
   if (!file.startsWith(root) || BLOCKED.test(file.slice(root.length))) {
     res.writeHead(403).end('Interdit');
     return;

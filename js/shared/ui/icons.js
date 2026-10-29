@@ -99,5 +99,9 @@ export const icons = {
   plusSquare: wrap(`<rect x="4" y="4" width="16" height="16" rx="3" /><path d="M12 8.5v7" /><path d="M8.5 12h7" />`),
   smartphone: wrap(`<rect x="6.5" y="3" width="11" height="18" rx="2.5" /><path d="M11 18h2" />`),
   copy: wrap(`<rect x="8.5" y="8.5" width="11" height="11" rx="2" /><path d="M15.5 8.5V6A1.5 1.5 0 0 0 14 4.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5" />`),
+  book: wrap(`
+    <path d="M12 6.5C10.5 5.2 8.3 4.5 5.5 4.5h-1v14h1c2.8 0 5 .7 6.5 2 1.5-1.3 3.7-2 6.5-2h1v-14h-1c-2.8 0-5 .7-6.5 2Z" />
+    <path d="M12 6.5v14" />
+  `),
   user: wrap(`<circle cx="12" cy="8" r="3.5" /><path d="M5 20v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1" />`),
 };
