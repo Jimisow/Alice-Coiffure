@@ -13,3 +13,4 @@ Versions/
 # Outillage local de l'éditeur (skill de design, hooks)
 .claude/
 .gemini/
+.env.local
