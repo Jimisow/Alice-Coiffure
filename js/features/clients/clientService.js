@@ -121,6 +121,13 @@ export async function restoreClient(clientId) {
   return restoreFromTrash('clients', client);
 }
 
+// La démo n'est proposée qu'en développement (localhost, réseau local) : en
+// production, de fausses fiches partiraient dans Firebase, où rien ne s'efface.
+export function canLoadDemo() {
+  const host = globalThis.location?.hostname || 'localhost';
+  return /^(localhost|127\.|10\.|192\.168\.)/.test(host);
+}
+
 // Clientes fictives pour découvrir l'app (effaçables dans Réglages).
 export async function loadDemoClients() {
   await loadDemoData();

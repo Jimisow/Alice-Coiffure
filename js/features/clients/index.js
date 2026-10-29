@@ -8,7 +8,7 @@ import { renderClientFormView } from './clientFormView.js';
 
 export {
   getClients, getClientById, searchClients, findByPhone, validateClient, createProvisionalClient,
-  getDeletedClients, restoreClient,
+  getDeletedClients, restoreClient, canLoadDemo,
 } from './clientService.js';
 
 export const clientsTab = { id: 'clientes', label: 'Clientes', icon: icons.users, path: '/clientes' };

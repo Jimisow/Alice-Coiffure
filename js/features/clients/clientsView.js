@@ -1,4 +1,4 @@
-import { getClients, searchClients, loadDemoClients, isToComplete } from './clientService.js';
+import { getClients, searchClients, loadDemoClients, isToComplete, canLoadDemo } from './clientService.js';
 import { getLoyaltyRules, isRewardDue, renderMiniCard } from '../loyalty/index.js';
 import { icons } from '../../shared/ui/icons.js';
 import { emptyState } from '../../shared/ui/components.js';
@@ -145,7 +145,7 @@ function renderFirstRun() {
       <button type="button" class="btn btn--primary" data-new-client>
         <span class="icon">${icons.plus}</span> Créer une première fiche
       </button>
-      <button type="button" class="btn btn--ghost" data-load-demo>Essayer avec des clientes fictives</button>
+      ${canLoadDemo() ? '<button type="button" class="btn btn--ghost" data-load-demo>Essayer avec des clientes fictives</button>' : ''}
     `,
   });
 }

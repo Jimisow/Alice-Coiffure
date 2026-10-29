@@ -20,16 +20,27 @@ Application **interne** pour le salon *Alice Coiffure* : fichier clientes (cheve
 
 ## Lancer / tester
 
-Aucune dépendance npm, aucun build : modules ES natifs servis tels quels.
+Aucune dépendance npm, pas de bundler : modules ES natifs servis tels quels.
 
 ```bash
 npm start          # = node server.mjs → http://localhost:5174/ (+ adresse Wi-Fi pour tester sur téléphone)
 npm test           # tests Node de la logique métier (node --test, sans navigateur)
-npm run env        # régénère config/env.js depuis .env (à faire avant un déploiement statique)
+npm run build      # dist/ = fichiers du site + config/env.js (production, Vercel)
+npm run env        # régénère config/env.js depuis .env (dev)
 ```
 
 - Port : **5174** (`PORT=xxxx` pour changer). Le serveur refuse de servir `.env`, `.claude`, `Versions`…
-- Vérifier à **largeur mobile** (~390 px). Premier lancement : fichier vide → bouton « Essayer avec des clientes fictives » (ids `demo-…`, effaçables via Réglages → Tout effacer).
+- Vérifier à **largeur mobile** (~390 px). Premier lancement : fichier vide → bouton « Essayer avec des clientes fictives » (ids `demo-…`, effaçables via Réglages → Tout effacer). **La démo n'est proposée qu'en développement** (localhost / réseau local, `clientService.canLoadDemo`) : en production elle enverrait de fausses fiches dans Firebase, où rien ne s'efface.
+
+## Dépôt & déploiement
+
+- **GitHub** : <https://github.com/Jimisow/Alice-Coiffure> (**public**, branche `main`), mis à jour le 29/10/2026 à la demande du propriétaire. Ne jamais pousser sans son accord explicite. Hors dépôt (`.gitignore`) : `.env`, `config/env.js`, `dist/`, `Versions/` (zips locaux), `.claude/` et `.gemini/` (outillage local), `.vercel/`, `.env.local`.
+- **Vercel** : projet **`alice-coiffure`** (équipe *kump*, compte jimisow), relié au dépôt GitHub → **chaque push sur `main` redéploie en production**. URL : **<https://alice-coiffure.vercel.app>**.
+  - `vercel.json` : build `npm run build`, sortie `dist/`, pas d'installation ; `no-cache` sur `/`, `index.html`, `sw.js`, `manifest.json`, `config/env.js`.
+  - Variables d'environnement Vercel : les 6 `FIREBASE_*` (Production, Preview, Development). `scripts/env.mjs` les lit (elles priment sur `.env`) ; **sur Vercel, le build échoue si elles manquent** (évite un site en ligne sans synchro).
+  - Seuls les fichiers du site sont publiés (`CLAUDE.md`, `server.mjs`, tests… → 404).
+  - Vérifié le 29/10 : site en ligne, service worker actif, connexion du compte d'Alice + synchro OK depuis le domaine Vercel.
+- Après un changement du shell (CSS, `index.html`) : incrémenter `CACHE_NAME` dans `sw.js` avant de pousser.
 - Les services/repositories s'importent dans Node : le store bascule en mémoire sans `localStorage` (voir `tests/`).
 - Le service worker **n'intercepte rien sur `localhost`** (volontaire). Hors-ligne testable depuis un autre hostname en HTTPS (ou `127.0.0.1`).
 - Chrome headless (puppeteer-core) : `browser.close()` peut rester bloqué sous Windows → `process.exit()`.
@@ -136,7 +147,7 @@ Le moteur `sync/syncEngine.js` (inactif sans config) : au retour du réseau, 2 s
 3. ✅ `firestore.rules` (fichier commun) publié ; `npm run check:firebase` avec le compte d'Alice : tout ✓.
 4. ✅ **Test de bout en bout réussi contre le vrai projet** (3 navigateurs vierges = 3 téléphones) : création → envoi → réception sur B ; modification sur B → reçue sur A ; suppression sur A → disparaît sur B + copie dans l'archive ; téléphone neuf C → fiche retrouvée dans la Corbeille via l'archive cloud → restaurée avec tampons et passages → revenue sur A.
 5. Restes de test dans l'archive d'Alice : 2 fiches « ZZ Test-synchro » + leurs passages (pierres tombales). Inoffensifs ; supprimables à la main dans la console (Firestore → aliceCoiffure/{uid}/archive et clients/visits) si on veut une base vierge.
-6. À faire au déploiement : ajouter le domaine du site dans **Authentication → Settings → Domaines autorisés** ; conseiller à Alice de changer son mot de passe (il a circulé pendant les tests).
+6. Déployé sur https://alice-coiffure.vercel.app (la connexion e-mail y fonctionne). Recommandé : ajouter ce domaine dans **Authentication → Settings → Domaines autorisés** (utile pour les futurs e-mails de réinitialisation de mot de passe) ; conseiller à Alice de changer son mot de passe (il a circulé pendant les tests).
 7. ⚠ Le dépôt Micka Poulet a encore son ancien `firestore.rules` (sans le bloc Alice) : le remplacer par le fichier commun avant toute publication depuis ce dépôt.
 
 ## Modèle de données
@@ -226,7 +237,7 @@ Repositories (tout `async`) : `getAll, getById, add, update(id, patch), remove(i
 
 ### PWA / service worker
 - `sw.js` : app shell précaché + *stale-while-revalidate* ; ne met jamais en cache Firestore/Auth (`*.googleapis.com` hors polices).
-- Après un changement du shell précaché (CSS, index), **incrémenter `CACHE_NAME`** (actuellement `alice-coiffure-v4`).
+- Après un changement du shell précaché (CSS, index), **incrémenter `CACHE_NAME`** (actuellement `alice-coiffure-v5`).
 
 ## Pièges connus
 

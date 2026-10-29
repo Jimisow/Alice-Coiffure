@@ -5,7 +5,7 @@ import {
 import { getLoyaltyRules, saveLoyaltyRules, OBJECTIF_MIN, OBJECTIF_MAX } from '../loyalty/index.js';
 import { renderOpeningHoursEditor, describeOpeningDays } from '../appointments/index.js';
 import { renderStatsPanel } from '../stats/index.js';
-import { getDeletedClients, restoreClient } from '../clients/index.js';
+import { getDeletedClients, restoreClient, canLoadDemo } from '../clients/index.js';
 import { icons } from '../../shared/ui/icons.js';
 import { topbar, bindBack } from '../../shared/ui/components.js';
 import { escapeHtml, plural } from '../../shared/utils/formatUtils.js';
@@ -274,7 +274,7 @@ function renderDonnees(slot, ctx, rerender) {
     <section class="ticket sheet">
       <p class="muted">Sur ce téléphone : ${plural(stats.clients, 'fiche')}, ${plural(stats.visits, 'passage')}, ${plural(stats.appointments, 'rendez-vous', 'rendez-vous')}.</p>
       <div class="btn-col">
-        <button type="button" class="btn btn--ghost btn--block" data-demo>Ajouter des clientes fictives (démo)</button>
+        ${canLoadDemo() ? '<button type="button" class="btn btn--ghost btn--block" data-demo>Ajouter des clientes fictives (démo)</button>' : ''}
       </div>
     </section>
     <section class="ticket sheet">
@@ -288,7 +288,7 @@ function renderDonnees(slot, ctx, rerender) {
     </section>
   `;
 
-  slot.querySelector('[data-demo]').addEventListener('click', async () => {
+  slot.querySelector('[data-demo]')?.addEventListener('click', async () => {
     await loadDemo();
     ctx.toast('Clientes fictives ajoutées');
     rerender();
